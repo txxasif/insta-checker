@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { checkInstagramAccount } from "../check/route";
+import { checkInstagramAccount } from "@/lib/instagram";
 
 // Re-export the runtime config so this route also runs in Node.js
 export const runtime = "nodejs";
