@@ -27,6 +27,8 @@ try {
         pm2 stop instagram-checker > $null 2>&1
         pm2 delete instagram-checker > $null 2>&1
         pm2 save --force
+        pm2 kill > $null 2>&1
+        taskkill /f /im node.exe > $null 2>&1
         $ErrorActionPreference = $oldPreference
         Write-Host "  [OK] PM2 processes stopped and deleted." -ForegroundColor Gray
     } else {
