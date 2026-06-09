@@ -74,7 +74,7 @@ try {
     $ErrorActionPreference = $oldPreference
 
     # Start the app
-    pm2 start npm --name "instagram-checker" -- run start
+    pm2 start "$PSScriptRoot\node_modules\next\dist\bin\next" --name "instagram-checker" -- start
 
     # Save the current PM2 state
     pm2 save
