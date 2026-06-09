@@ -8,18 +8,19 @@ Bulk-check Instagram usernames in real time — see if accounts are active, deac
 
 ## Setup
 
-1. [Download the ZIP](https://github.com/txxasif/insta-checker/archive/refs/heads/main.zip) and extract it
-2. Right-click **`setup.ps1`** → **Run with PowerShell**
-3. Open your browser and go to **http://localhost:3000**
+1. [Download the ZIP](https://github.com/txxasif/insta-checker/archive/refs/heads/main.zip) and extract it on your computer.
+2. Double-click the file named **`setup.bat`**.
+3. A window will open asking for Administrator permissions. Click **Yes**.
+4. Wait for the installation to finish, then press **Enter** to close the window.
+5. Open your browser and go to: **[http://localhost:3000](http://localhost:3000)**
 
-> If Windows blocks the script, open PowerShell as Administrator and run:
-> `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`
-
-The app will start automatically every time Windows boots.
+The app will now start automatically every time your computer turns on.
 
 ---
 
-## Commands
+## Managing the App
+
+If you ever need to manually control the application, open PowerShell and use:
 
 | Task | Command |
 |---|---|
@@ -33,12 +34,8 @@ The app will start automatically every time Windows boots.
 
 ## Uninstall
 
-```powershell
-pm2 stop instagram-checker
-pm2 delete instagram-checker
-pm2 save --force
-pm2 unstartup
-npm uninstall -g pm2
-```
-
-Then delete the project folder and uninstall Node.js from **Settings → Apps**.
+1. Double-click the file named **`uninstall.bat`**.
+2. Click **Yes** when it asks for Administrator permissions.
+3. Wait for it to finish, then press **Enter** to close.
+4. Delete the project folder from your computer.
+5. (Optional) Uninstall Node.js from Windows Settings → Apps.
