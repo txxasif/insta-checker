@@ -98,8 +98,11 @@ WshShell.Run "node node_modules\next\dist\bin\next start", 0, False
     $Shortcut.WorkingDirectory = $PSScriptRoot
     $Shortcut.Save()
 
-    # Kill any existing Next.js servers to avoid port conflicts
+    # Kill any existing Next.js servers to avoid port conflicts (ignore error if not running)
+    $oldPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
     taskkill /f /im node.exe > $null 2>&1
+    $ErrorActionPreference = $oldPreference
 
     # Start the app immediately in the background using the VBScript
     Write-Host "  Starting the application in the background..." -ForegroundColor Yellow

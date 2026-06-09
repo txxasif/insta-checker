@@ -22,8 +22,11 @@ try {
     # == Step 2: Stop background Node.js server =================================
     Write-Host "[1/4] Stopping background server..." -ForegroundColor Green
     
-    # Forcefully close any running node.exe servers
+    # Forcefully close any running node.exe servers (ignore error if not running)
+    $oldPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
     taskkill /f /im node.exe > $null 2>&1
+    $ErrorActionPreference = $oldPreference
     
     # Also clean up PM2 if it's still running from previous attempts
     if (Get-Command pm2 -ErrorAction SilentlyContinue) {
