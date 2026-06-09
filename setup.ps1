@@ -3,7 +3,7 @@
 
 $ErrorActionPreference = "Stop"
 
-# ── Step 1: Check for Administrator privileges & Auto-Elevate ──────────────────
+# == Step 1: Check for Administrator privileges & Auto-Elevate ==================
 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 if (-not $isAdmin) {
     Write-Host "Requesting Administrator privileges..." -ForegroundColor Yellow
@@ -19,7 +19,7 @@ try {
     Write-Host "======================================" -ForegroundColor Cyan
     Write-Host ""
 
-    # ── Step 2: Install Node.js ────────────────────────────────────────────────
+    # == Step 2: Install Node.js ================================================
     Write-Host "[1/5] Checking for Node.js..." -ForegroundColor Green
 
     $nodeInstalled = Get-Command node -ErrorAction SilentlyContinue
@@ -38,7 +38,7 @@ try {
         Write-Host "  Node.js $(node --version) installed successfully." -ForegroundColor Gray
     }
 
-    # ── Step 3: Install project packages ──────────────────────────────────────
+    # == Step 3: Install project packages ======================================
     Write-Host ""
     Write-Host "[2/5] Installing project packages..." -ForegroundColor Green
 
@@ -47,7 +47,7 @@ try {
 
     Write-Host "  Packages installed successfully." -ForegroundColor Gray
 
-    # ── Step 4: Build the app ─────────────────────────────────────────────────
+    # == Step 4: Build the app =================================================
     Write-Host ""
     Write-Host "[3/5] Building the app (this may take a minute)..." -ForegroundColor Green
 
@@ -55,7 +55,7 @@ try {
 
     Write-Host "  Build complete." -ForegroundColor Gray
 
-    # ── Step 5: Install PM2 ───────────────────────────────────────────────────
+    # == Step 5: Install PM2 ===================================================
     Write-Host ""
     Write-Host "[4/5] Installing PM2..." -ForegroundColor Green
 
@@ -63,7 +63,7 @@ try {
 
     Write-Host "  PM2 installed successfully." -ForegroundColor Gray
 
-    # ── Step 6: Start the app and configure auto-start ────────────────────────
+    # == Step 6: Start the app and configure auto-start ========================
     Write-Host ""
     Write-Host "[5/5] Starting the app and setting up auto-start..." -ForegroundColor Green
 
@@ -86,10 +86,10 @@ try {
     
     Register-ScheduledTask -TaskName "InstagramCheckerStartup" -Action $action -Trigger $trigger -Principal $principal -Force | Out-Null
 
-    Write-Host "  ✓ Startup task registered successfully." -ForegroundColor Gray
+    Write-Host "  [OK] Startup task registered successfully." -ForegroundColor Gray
     Write-Host "  App is running and will start automatically on boot/logon." -ForegroundColor Gray
 
-    # ── Done ──────────────────────────────────────────────────────────────────
+    # == Done ==================================================================
     Write-Host ""
     Write-Host "======================================" -ForegroundColor Cyan
     Write-Host "  Setup complete!" -ForegroundColor Cyan
@@ -104,7 +104,7 @@ try {
 
 } catch {
     Write-Host ""
-    Write-Host "❌ ERROR: Setup failed!" -ForegroundColor Red
+    Write-Host "ERROR: Setup failed!" -ForegroundColor Red
     Write-Host $_.Exception.Message -ForegroundColor Red
     Write-Host ""
 } finally {
