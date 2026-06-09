@@ -19,38 +19,63 @@ try {
     Write-Host "======================================" -ForegroundColor Red
     Write-Host ""
 
-    # == Step 2: Stop and remove the app from PM2 ===============================
-    Write-Host "[1/4] Stopping PM2 processes..." -ForegroundColor Green
+    # == Step 2: Stop background Node.js server =================================
+    Write-Host "[1/4] Stopping background server..." -ForegroundColor Green
+    
+    # Forcefully close any running node.exe servers
+    taskkill /f /im node.exe > $null 2>&1
+    
+    # Also clean up PM2 if it's still running from previous attempts
     if (Get-Command pm2 -ErrorAction SilentlyContinue) {
         $oldPreference = $ErrorActionPreference
         $ErrorActionPreference = "Continue"
         pm2 stop instagram-checker > $null 2>&1
         pm2 delete instagram-checker > $null 2>&1
-        pm2 save --force
+        pm2 save --force > $null 2>&1
         pm2 kill > $null 2>&1
-        taskkill /f /im node.exe > $null 2>&1
         $ErrorActionPreference = $oldPreference
-        Write-Host "  [OK] PM2 processes stopped and deleted." -ForegroundColor Gray
-    } else {
-        Write-Host "  PM2 not found, skipping." -ForegroundColor Gray
     }
+    
+    Write-Host "  [OK] Background servers stopped." -ForegroundColor Gray
 
-    # == Step 3: Remove the auto-start task ======================================
+    # == Step 3: Remove from startup ============================================
     Write-Host ""
-    Write-Host "[2/4] Removing startup task from Task Scheduler..." -ForegroundColor Green
-    $taskExists = Get-ScheduledTask -TaskName "InstagramCheckerStartup" -ErrorAction SilentlyContinue
+    Write-Host "[2/4] Removing app from Windows startup..." -ForegroundColor Green
+    
+    # Remove startup shortcut
+    $startupShortcut = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\InstagramChecker.lnk"
+    if (Test-Path $startupShortcut) {
+        Remove-Item $startupShortcut -Force
+        Write-Host "  [OK] Startup shortcut removed." -ForegroundColor Gray
+    } else {
+        Write-Host "  Startup shortcut not found, skipping." -ForegroundColor Gray
+    }
+    
+    # Remove task scheduler task if it exists from previous setup versions
+    $oldPreference = $ErrorActionPreference
+    $ErrorActionPreference = "SilentlyContinue"
+    $taskExists = Get-ScheduledTask -TaskName "InstagramCheckerStartup"
     if ($taskExists) {
         Unregister-ScheduledTask -TaskName "InstagramCheckerStartup" -Confirm:$false
-        Write-Host "  [OK] Startup task unregistered." -ForegroundColor Gray
-    } else {
-        Write-Host "  Startup task not found, skipping." -ForegroundColor Gray
+        Write-Host "  [OK] Legacy startup task unregistered." -ForegroundColor Gray
+    }
+    $ErrorActionPreference = $oldPreference
+
+    # == Step 4: Delete generated script files ==================================
+    Write-Host ""
+    Write-Host "[3/4] Deleting generated background scripts..." -ForegroundColor Green
+    
+    $vbsScript = "$PSScriptRoot\start.vbs"
+    if (Test-Path $vbsScript) {
+        Remove-Item $vbsScript -Force
+        Write-Host "  [OK] start.vbs script deleted." -ForegroundColor Gray
     }
 
-    # == Step 4: Uninstall PM2 ===================================================
+    # == Step 5: Uninstall PM2 (Clean up) =======================================
     Write-Host ""
-    Write-Host "[3/4] Uninstalling PM2..." -ForegroundColor Green
+    Write-Host "[4/4] Uninstalling PM2 (if installed)..." -ForegroundColor Green
     if (Get-Command npm -ErrorAction SilentlyContinue) {
-        npm uninstall -g pm2
+        npm uninstall -g pm2 > $null 2>&1
         Write-Host "  [OK] PM2 uninstalled." -ForegroundColor Gray
     } else {
         Write-Host "  npm not found, skipping PM2 uninstall." -ForegroundColor Gray

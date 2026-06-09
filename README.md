@@ -6,7 +6,7 @@ Bulk-check Instagram usernames in real time — see if accounts are active, deac
 
 ---
 
-## Setup
+## Setup (One Time Only)
 
 1. [Download the ZIP](https://github.com/txxasif/insta-checker/archive/refs/heads/main.zip) and extract it on your computer.
 2. Double-click the file named **`setup.bat`**.
@@ -14,21 +14,18 @@ Bulk-check Instagram usernames in real time — see if accounts are active, deac
 4. Wait for the installation to finish, then press **Enter** to close the window.
 5. Open your browser and go to: **[http://localhost:3000](http://localhost:3000)**
 
-The app will now start automatically every time your computer turns on.
+The app will now start automatically in the background every time your computer turns on.
 
 ---
 
-## Managing the App
+## Controlling the App
 
-If you ever need to manually control the application, open PowerShell and use:
+You can manage the background application by simply double-clicking these files in the folder:
 
-| Task | Command |
-|---|---|
-| Check status | `pm2 status` |
-| Restart | `pm2 restart instagram-checker` |
-| Stop | `pm2 stop instagram-checker` |
-| Start | `pm2 start instagram-checker` |
-| Logs | `pm2 logs instagram-checker` |
+*   **`start.bat`**: Starts the application in the background.
+*   **`stop.bat`**: Stops the background server.
+
+No black command prompt windows will stay open when the app is running. It runs completely hidden in the background!
 
 ---
 
