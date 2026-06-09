@@ -67,8 +67,11 @@ try {
     Write-Host ""
     Write-Host "[5/5] Starting the app and setting up auto-start..." -ForegroundColor Green
 
-    # Remove old process if it exists
-    pm2 delete instagram-checker 2>$null
+    # Remove old process if it exists (ignore error if it doesn't exist)
+    $oldPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    pm2 delete instagram-checker > $null 2>&1
+    $ErrorActionPreference = $oldPreference
 
     # Start the app
     pm2 start npm --name "instagram-checker" -- run start

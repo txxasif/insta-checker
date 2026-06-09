@@ -22,9 +22,12 @@ try {
     # == Step 2: Stop and remove the app from PM2 ===============================
     Write-Host "[1/4] Stopping PM2 processes..." -ForegroundColor Green
     if (Get-Command pm2 -ErrorAction SilentlyContinue) {
-        pm2 stop instagram-checker 2>$null
-        pm2 delete instagram-checker 2>$null
+        $oldPreference = $ErrorActionPreference
+        $ErrorActionPreference = "Continue"
+        pm2 stop instagram-checker > $null 2>&1
+        pm2 delete instagram-checker > $null 2>&1
         pm2 save --force
+        $ErrorActionPreference = $oldPreference
         Write-Host "  [OK] PM2 processes stopped and deleted." -ForegroundColor Gray
     } else {
         Write-Host "  PM2 not found, skipping." -ForegroundColor Gray
